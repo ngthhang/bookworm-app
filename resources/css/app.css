@@ -1,0 +1,33 @@
+/* APP GENERAL */
+.App{
+  width:100%;
+}
+
+/* HOME */
+.navbar-shadow{
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+}
+
+
+/* CARD BOOK */
+.card-shadow{
+  margin: 20px;
+  border:1px solid #f0f0f0;
+  border-radius: 2px;
+  padding: 0px
+}
+
+.card-shadow:hover{
+  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+  rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
+.card-line-through{
+  text-decoration: line-through;
+}
+
+.card-price{
+  font-weight: bold;
+  font-size: 18px;
+  
+}
