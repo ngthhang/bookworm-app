@@ -1,55 +1,80 @@
 import React, { Component } from "react";
-import { Carousel, Button, Row, Col } from "antd";
-import { CaretLeftOutlined, CaretRightOutlined } from "@ant-design/icons";
+import { Carousel, Row, Col } from "antd";
 import CardBook from "../general/CardBook";
-
-const contentStyle = {
-    height: "300px",
-    color: "black",
-    lineHeight: "160px",
-    textAlign: "center",
-    background: "#364d79",
-};
+import CarouselNextButton from "./CarouselNextButton";
+import CarouselPrevButton from "./CarouselPrevButton";
 
 export default class HomeOnSaleCarousel extends Component {
-    render() {
-        return (
-            <Row className="w-100">
-                <Col span={1} className="d-flex align-items-center">
-                    <Button
-                        className="d-flex justify-content-center align-items-center"
-                        size="large"
-                        type="default"
-                        shape="circle"
-                        icon={<CaretLeftOutlined />}
-                    />
-                </Col>
-                <Col span={20} offset={1}>
-                    <Carousel className="b-0">
-                        <div className="d-flex flex-row align-items-center justify-content-around">
-                            <CardBook />
-                            <CardBook />
-                            <CardBook />
-                            <CardBook />
-                        </div>
-                        <div className="d-flex flex-row align-items-center justify-content-around">
-                            <CardBook />
-                            <CardBook />
-                            <CardBook />
-                            <CardBook />
-                        </div>
-                    </Carousel>
-                </Col>
-                <Col offset={1} span={1} className="d-flex align-items-center">
-                    <Button
-                        className="d-flex justify-content-center align-items-center"
-                        size="large"
-                        type="default"
-                        shape="circle"
-                        icon={<CaretRightOutlined />}
-                    />
-                </Col>
-            </Row>
-        );
-    }
+  constructor(props) {
+    super(props);
+    this.carousel = React.createRef();
+  }
+
+  prev = () =>{
+    this.carousel.prev();
+  }
+
+  next = () =>{
+    this.carousel.next();
+  }
+
+  render() {
+    const carouselProps = {
+      slidesToScroll: 4,
+      slidesToShow: 4,
+      dots: false,
+      autoplay: true,
+      infinite: true,
+      className: "b-0",
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 3,
+            slidesToScroll: 3,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            initialSlide: 2
+          }
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1
+          }
+        }
+      ]
+    };
+    return (
+      <Row className="w-100">
+        <Col span={1} className="d-flex align-items-center">
+          <CarouselPrevButton onClick={this.prev} />
+        </Col>
+        <Col span={20} offset={1}>
+          <Carousel 
+            {...carouselProps}
+            ref={node => (this.carousel = node)} 
+          >
+            <CardBook />
+            <CardBook />
+            <CardBook />
+            <CardBook />
+            <CardBook />
+            <CardBook />
+          </Carousel>
+        </Col>
+        <Col offset={1} span={1} className="d-flex align-items-center">
+          <CarouselNextButton onClick={this.next} />
+        </Col>
+      </Row>
+    );
+  }
 }

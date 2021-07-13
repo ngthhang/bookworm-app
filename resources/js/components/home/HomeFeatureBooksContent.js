@@ -5,20 +5,30 @@ import { Row, Col } from 'antd';
 export default class HomeFeatureBooksContent extends Component {
   render() {
     return (
-      <Row className='w-100 mt-5' align='center'>
-        <Col span={20}>
-          <div className="d-flex flex-row align-items-center justify-content-around">
-            <CardBook />
-            <CardBook />
-            <CardBook />
-            <CardBook />
-          </div>
-          <div className="d-flex flex-row align-items-center justify-content-around">
-            <CardBook />
-            <CardBook />
-            <CardBook />
-            <CardBook />
-          </div>
+      <Row className='mt-5 d-flex align-items-center justify-content-center'>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
+        </Col>
+        <Col span={24} sm={12} md={8} xl={5} lg={6}>
+          <CardBook />
         </Col>
       </Row>
     )

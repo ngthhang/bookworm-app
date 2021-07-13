@@ -3,9 +3,9 @@ import {Image} from 'antd';
 
 export default function CardBook(){
   return(
-    <div className='card-shadow'>
+    <div className='card-book'>
       <Image
-        width={240}
+        width="100%"
         src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
       />
       <div className="p-3">

@@ -5,10 +5,10 @@ import HomeOnSaleCarousel from './HomeOnSaleCarousel';
 export default class HomeOnSale extends Component{
   render() {
     return (
-      <div>
-        <HomeOnSaleHeader />
-        <HomeOnSaleCarousel />
-      </div>
-    )
+        <div>
+            <HomeOnSaleHeader />
+            <HomeOnSaleCarousel />
+        </div>
+    );
   }
 };

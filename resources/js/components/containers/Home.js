@@ -4,7 +4,7 @@ import HomeFeatureBooks from '../home/HomeFeatureBooks';
 
 function Home() {
   return (
-    <div className="mt-5 mx-4">
+    <div className="home-page">
       <HomeOnSale />
       <HomeFeatureBooks />
     </div>
