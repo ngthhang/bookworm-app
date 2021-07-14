@@ -1,16 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "antd/dist/antd.css";
-import "bootstrap/dist/css/bootstrap.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import 'antd/dist/antd.css';
+import 'bootstrap/dist/css/bootstrap.css';
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Home from "./containers/Home";
-import Shop from "./containers/Shop";
-import About from "./containers/About";
-import Cart from "./containers/Cart";
-import AppNavBar from "./general/AppNavBar";
-import AppFooter from "./general/AppFooter";
+import Home from './containers/Home';
+import Shop from './containers/Shop';
+import About from './containers/About';
+import Cart from './containers/Cart';
+import AppNavBar from './general/AppNavBar';
+import AppFooter from './general/AppFooter';
 
 function App() {
   return (
@@ -31,4 +31,4 @@ function App() {
 
 export default App;
 
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById('app'));

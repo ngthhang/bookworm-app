@@ -1,21 +1,21 @@
 import React from 'react';
-import {Image} from 'antd';
+import { Image } from 'antd';
+import PriceTag from './PriceTag';
+import BookGeneralInfo from './BookGeneralInfo';
 
-export default function CardBook(){
-  return(
-    <div className='card-book'>
+export default function CardBook() {
+  return (
+    <div className="card-book">
       <Image
         width="100%"
         src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
       />
-      <div className="p-3">
-        <h4>Book Title</h4>
-        <span>Author name</span>
-      </div>
-      <div className="bg-light p-3">
-        <span className="card-line-through mr-2">$1.09</span>
-        <span className="card-price">$1.09</span>
-      </div>
+      <BookGeneralInfo className="p-3" name="Book Title" author="Author name" />
+      <PriceTag
+        discountPrice={15000}
+        normalPrice={12000}
+        className="bg-light p-3"
+      />
     </div>
-  )
-};
+  );
+}

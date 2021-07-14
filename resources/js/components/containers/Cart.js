@@ -1,10 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import CartHeader from '../cart/CartHeader';
+import CartContent from '../cart/CartContent';
 
 function Cart() {
   return (
-    <div className="container">
-      <p>Cart</p>
+    <div className="home-page">
+      <CartHeader />
+      <CartContent />
     </div>
   );
 }
