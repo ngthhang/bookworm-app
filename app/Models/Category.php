@@ -7,9 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    public $timestamps = false;
+  public $timestamps = false;
 
-    protected $table = 'categories';
+  protected $table = 'categories';
+
+  public function books()
+  {
+    return $this->hasMany(Book::class);
+  }
 }

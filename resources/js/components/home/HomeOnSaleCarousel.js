@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { Carousel, Row, Col } from "antd";
-import CardBook from "../general/CardBook";
-import CarouselNextButton from "./CarouselNextButton";
-import CarouselPrevButton from "./CarouselPrevButton";
+import React, { Component } from 'react';
+import { Carousel, Row, Col } from 'antd';
+import CardBook from '../general/CardBook';
+import CarouselNextButton from './CarouselNextButton';
+import CarouselPrevButton from './CarouselPrevButton';
 
 export default class HomeOnSaleCarousel extends Component {
   constructor(props) {
@@ -10,13 +10,13 @@ export default class HomeOnSaleCarousel extends Component {
     this.carousel = React.createRef();
   }
 
-  prev = () =>{
+  prev = () => {
     this.carousel.prev();
-  }
+  };
 
-  next = () =>{
+  next = () => {
     this.carousel.next();
-  }
+  };
 
   render() {
     const carouselProps = {
@@ -25,7 +25,7 @@ export default class HomeOnSaleCarousel extends Component {
       dots: false,
       autoplay: true,
       infinite: true,
-      className: "b-0",
+      className: 'b-0',
       responsive: [
         {
           breakpoint: 1024,
@@ -53,22 +53,19 @@ export default class HomeOnSaleCarousel extends Component {
         }
       ]
     };
+
+    const children = [];
+    for (let i = 0; i < 31; i++) {
+      children.push(<CardBook key={i} className="mx-2" />);
+    }
     return (
-      <Row className="w-100">
+      <Row>
         <Col span={1} className="d-flex align-items-center">
           <CarouselPrevButton onClick={this.prev} />
         </Col>
-        <Col span={20} offset={1}>
-          <Carousel 
-            {...carouselProps}
-            ref={node => (this.carousel = node)} 
-          >
-            <CardBook />
-            <CardBook />
-            <CardBook />
-            <CardBook />
-            <CardBook />
-            <CardBook />
+        <Col offset={1} span={20}>
+          <Carousel {...carouselProps} ref={(node) => (this.carousel = node)}>
+            {children}
           </Carousel>
         </Col>
         <Col offset={1} span={1} className="d-flex align-items-center">

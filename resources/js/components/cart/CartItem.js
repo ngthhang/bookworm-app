@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Row, Col, Button, InputNumber } from 'antd';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import { MinusOutlined } from '@ant-design/icons';
 import PriceTag from '../general/PriceTag';
 import BookGeneralInfo from '../general/BookGeneralInfo';
 

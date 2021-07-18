@@ -14,4 +14,4 @@ use App\Http\Controllers\RenderView;
 |
 */
 
-Route::get('{path?}', [RenderView::class, '__invoke'])->where('path', '[a-zA-Z0-9-/]+');
+Route::get('{path?}', RenderView::class)->where('path', '[a-zA-Z0-9-/]+');

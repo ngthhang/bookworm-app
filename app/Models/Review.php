@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    public $timestamps = false;
+  public $timestamps = false;
+
+  public function book()
+  {
+    return $this->belongsTo(Book::class);
+  }
 }
