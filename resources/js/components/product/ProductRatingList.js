@@ -1,8 +1,7 @@
 import React from 'react';
 import { List, Typography, Space, Divider, Rate } from 'antd';
-import ProductRatingListPagination from './ProductRatingListPagination';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const data = [
   {
