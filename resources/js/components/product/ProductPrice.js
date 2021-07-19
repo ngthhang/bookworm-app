@@ -24,7 +24,7 @@ function ProductPrice() {
       <div className="d-flex flex-column align-items-start justify-content-center">
         <Title level={5}>Quantity: </Title>
         <Row className="w-100 py-3" align="center">
-          <Col span={2} sm={2} md={2} xl={4} lg={4}>
+          <Col span={3} sm={2} md={2} xl={4} lg={4}>
             <Button
               type="primary"
               style={btnStyle}
@@ -32,7 +32,7 @@ function ProductPrice() {
             ></Button>
           </Col>
           <Col
-            span={16}
+            span={18}
             sm={12}
             md={6}
             xl={16}
@@ -41,7 +41,7 @@ function ProductPrice() {
           >
             <Title level={5}>3</Title>
           </Col>
-          <Col span={2} sm={2} md={2} xl={4} lg={4}>
+          <Col span={3} sm={2} md={2} xl={4} lg={4}>
             <Button
               type="primary"
               style={btnStyle}
@@ -50,7 +50,7 @@ function ProductPrice() {
           </Col>
         </Row>
         <Row className="w-100" align="center">
-          <Col span={20} sm={16} md={10} xl={24} lg={24}>
+          <Col span={24} sm={16} md={10} xl={24} lg={24}>
             <Button type="primary" size="large" style={btnStyle}>
               Add to Cart
             </Button>
