@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+
 use App\Models\Book;
 
 class BookController extends Controller
@@ -15,10 +17,7 @@ class BookController extends Controller
    */
   public function index()
   {
-    $books = Book::all();
-    foreach ($books as $book) {
-      echo $book->currentDiscount;
-    }
+    // return $recommendedBooks;
   }
 
   /**
