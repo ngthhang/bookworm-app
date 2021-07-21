@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 
-function CartHeader() {
+function CartHeader({ cart }) {
+  const { totalCart } = cart;
+  useEffect(() => {}, [cart]);
   return (
     <div>
-      <h3>Your cart (3 items)</h3>
+      <h3>Your cart ({totalCart} items)</h3>
       <hr />
     </div>
   );
 }
 
-export default CartHeader;
+const mapStateToProps = (state) => ({
+  cart: state.cart
+});
+
+export default connect(mapStateToProps)(CartHeader);
