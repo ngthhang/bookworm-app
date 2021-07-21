@@ -1,7 +1,10 @@
-import React from 'react';
-import { Card, Button, Typography, InputNumber, Row, Col } from 'antd';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Typography, Button } from 'antd';
+import { connect } from 'react-redux';
 import { PriceTag } from '../general';
+import { Redirect } from 'react-router-dom';
+import { addToCart } from '../../actions';
+import QuantityAdjustBtnGroup from '../general/QuantityAdjustBtnGroup';
 
 const { Title } = Typography;
 
@@ -15,44 +18,88 @@ const btnStyle = {
   justifyContent: 'center'
 };
 
-function ProductPrice() {
+const btnStyleDisabled = {
+  width: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+};
+
+function ProductPrice(props) {
+  const { discounts, book_price, cart, id } = props;
+  const { cartList } = cart;
+  const [quantity, setQuantity] = useState(1);
+  const [redirect, enableRedirect] = useState(false);
+  let discountPrice = null;
+  let isItemInCart = false;
+  if (discounts.length > 0) {
+    discountPrice = discounts[0].discount_price;
+  }
+
+  cartList.map((item) => {
+    if (item.id === id) {
+      isItemInCart = true;
+      return;
+    }
+  });
+
+  const addQuantity = () => {
+    if (quantity < 8) {
+      setQuantity(quantity + 1);
+    }
+  };
+
+  const minusQuantity = () => {
+    if (quantity !== 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const addItemToCart = () => {
+    const { id, book_title, book_price, author, dispatch, book_cover_photo } =
+      props;
+    const { author_name } = author;
+    const item = {
+      id: id,
+      book_title: book_title,
+      book_price: book_price,
+      author_name: author_name,
+      discount_price: discountPrice,
+      book_cover_photo: book_cover_photo,
+      quantity: quantity
+    };
+    dispatch(addToCart(item));
+    enableRedirect(true);
+  };
+
+  if (redirect) {
+    return <Redirect to="/cart" />;
+  }
+
   return (
     <Card
-      title={<PriceTag normalPrice={1200} discountPrice={200} />}
+      title={<PriceTag bookPrice={book_price} discountPrice={book_price} />}
       style={{ width: '100%' }}
     >
       <div className="d-flex flex-column align-items-start justify-content-center">
         <Title level={5}>Quantity: </Title>
-        <Row className="w-100 py-3" align="center">
-          <Col span={3} sm={2} md={2} xl={4} lg={4}>
-            <Button
-              type="primary"
-              style={btnStyle}
-              icon={<MinusOutlined />}
-            ></Button>
-          </Col>
-          <Col
-            span={18}
-            sm={12}
-            md={6}
-            xl={16}
-            lg={16}
-            className="d-flex align-items-center justify-content-center"
-          >
-            <Title level={5}>3</Title>
-          </Col>
-          <Col span={3} sm={2} md={2} xl={4} lg={4}>
-            <Button
-              type="primary"
-              style={btnStyle}
-              icon={<PlusOutlined />}
-            ></Button>
-          </Col>
-        </Row>
+        <QuantityAdjustBtnGroup
+          plusQuantityFunc={addQuantity}
+          minusQuantityFunc={minusQuantity}
+          quantity={quantity}
+          disabled={isItemInCart}
+          className="my-3"
+        />
         <Row className="w-100" align="center">
           <Col span={24} sm={16} md={10} xl={24} lg={24}>
-            <Button type="primary" size="large" style={btnStyle}>
-              Add to Cart
+            <Button
+              onClick={() => addItemToCart()}
+              type="primary"
+              size="large"
+              disabled={isItemInCart}
+              style={!isItemInCart ? btnStyle : btnStyleDisabled}
+            >
+              {isItemInCart ? 'Added to cart' : 'Add to cart'}
             </Button>
           </Col>
         </Row>
@@ -61,4 +108,8 @@ function ProductPrice() {
   );
 }
 
-export default ProductPrice;
+const mapStateToProps = (state) => ({
+  cart: state.cart
+});
+
+export default connect(mapStateToProps)(ProductPrice);

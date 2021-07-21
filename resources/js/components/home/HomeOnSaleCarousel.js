@@ -1,13 +1,28 @@
 import React, { Component } from 'react';
-import { Carousel, Row, Col } from 'antd';
+import { Carousel, Row, Col, Spin } from 'antd';
 import CardBook from '../general/CardBook';
 import CarouselNextButton from './CarouselNextButton';
 import CarouselPrevButton from './CarouselPrevButton';
+import { getBooksOnSale } from '../../services/book.service';
 
 export default class HomeOnSaleCarousel extends Component {
   constructor(props) {
     super(props);
     this.carousel = React.createRef();
+    this.state = {
+      booksOnSale: [],
+      isLoading: true
+    };
+  }
+
+  async componentDidMount() {
+    console.log('did mount');
+    const data = await getBooksOnSale();
+    console.log(data);
+    this.setState({
+      booksOnSale: data,
+      isLoading: false
+    });
   }
 
   prev = () => {
@@ -19,16 +34,17 @@ export default class HomeOnSaleCarousel extends Component {
   };
 
   render() {
+    const { booksOnSale, isLoading } = this.state;
     const carouselProps = {
       slidesToScroll: 4,
       slidesToShow: 4,
       dots: false,
       autoplay: true,
       infinite: true,
-      className: 'b-0',
+      className: 'b-0 my-3',
       responsive: [
         {
-          breakpoint: 1024,
+          breakpoint: 1200,
           settings: {
             slidesToShow: 3,
             slidesToScroll: 3,
@@ -37,10 +53,19 @@ export default class HomeOnSaleCarousel extends Component {
           }
         },
         {
-          breakpoint: 600,
+          breakpoint: 1024,
           settings: {
             slidesToShow: 2,
             slidesToScroll: 2,
+            infinite: true,
+            dots: true
+          }
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
             initialSlide: 2
           }
         },
@@ -54,19 +79,20 @@ export default class HomeOnSaleCarousel extends Component {
       ]
     };
 
-    const children = [];
-    for (let i = 0; i < 31; i++) {
-      children.push(<CardBook key={i} className="mx-2" />);
-    }
     return (
       <Row>
         <Col span={1} className="d-flex align-items-center">
           <CarouselPrevButton onClick={this.prev} />
         </Col>
         <Col offset={1} span={20}>
-          <Carousel {...carouselProps} ref={(node) => (this.carousel = node)}>
-            {children}
-          </Carousel>
+          {!isLoading ? (
+            <Carousel {...carouselProps} ref={(node) => (this.carousel = node)}>
+              {booksOnSale.length > 0 &&
+                booksOnSale.map((item) => (
+                  <CardBook className="mx-2" {...item} key={item.id} />
+                ))}
+            </Carousel>
+          ) : null}
         </Col>
         <Col offset={1} span={1} className="d-flex align-items-center">
           <CarouselNextButton onClick={this.next} />

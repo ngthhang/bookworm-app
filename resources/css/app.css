@@ -1,4 +1,8 @@
 /* APP GENERAL */
+*{
+  box-sizing: border-box;
+}
+
 .App{
   min-height: 100%;
   position: relative;

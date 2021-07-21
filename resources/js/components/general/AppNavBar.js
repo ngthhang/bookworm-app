@@ -3,14 +3,16 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { connect } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import Icon from '../../../assets/bookworm_icon.svg';
 
-function AppNavBar() {
+function AppNavBar({ cart }) {
+  const { totalCart } = cart;
   return (
-    <header>
-      <Navbar className="navbar-shadow pb-3">
+    <header className="sticky-top">
+      <Navbar className="navbar-shadow pb-3" style={{ width: '100%' }}>
         <div className="w-100 mx-3 d-flex flex-row align-items-center justify-content-between">
           <Navbar.Brand>
             <img src={Icon} alt="React Logo" />
@@ -27,7 +29,7 @@ function AppNavBar() {
                 About
               </Link>
               <Link to={'/cart'} className="nav-link">
-                Cart(0)
+                Cart({totalCart})
               </Link>
             </Nav>
           </Nav>
@@ -37,4 +39,8 @@ function AppNavBar() {
   );
 }
 
-export default AppNavBar;
+const mapStateToProps = (state) => ({
+  cart: state.cart
+});
+
+export default connect(mapStateToProps)(AppNavBar);

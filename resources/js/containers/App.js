@@ -1,11 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import 'bootstrap/dist/css/bootstrap.css';
-
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from '../reducers';
 import { Home, Shop, About, Cart, Product } from '../pages';
 import { AppNavBar, AppFooter } from '../components/general';
+
+const store = createStore(rootReducer);
 
 export default function App() {
   return (
@@ -29,4 +33,9 @@ export default function App() {
   );
 }
 
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('app')
+);

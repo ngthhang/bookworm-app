@@ -29,7 +29,7 @@ class Book extends Model
 
   public function discounts()
   {
-    return $this->hasMany(Discount::class);
+    return $this->hasMany(Discount::class)->getAvailableDiscount();
   }
 
   public function scopeJoinDiscount($query, $typeJoin)

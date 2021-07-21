@@ -5,13 +5,13 @@ import CardBook from '../general/CardBook';
 const { Option } = Select;
 
 const children = [];
-for (let i = 0; i < 31; i++) {
-  children.push(
-    <Col key={i} span={24} sm={12} md={8} xl={6} lg={6}>
-      <CardBook />
-    </Col>
-  );
-}
+// for (let i = 0; i < 31; i++) {
+//   children.push(
+//     <Col key={i} span={24} sm={12} md={8} xl={6} lg={6}>
+//       <CardBook />
+//     </Col>
+//   );
+// }
 
 export default function ShopFilter() {
   return (

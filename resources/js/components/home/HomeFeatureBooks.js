@@ -1,13 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import HomeFeatureBooksHeader from './HomeFeatureBooksHeader';
 import HomeFeatureBooksContent from './HomeFeatureBooksContent';
-export default class HomeFeatureBooks extends Component {
-  render() {
-    return (
-      <div>
-        <HomeFeatureBooksHeader />
-        <HomeFeatureBooksContent />
-      </div>
-    )
-  }
-};
+
+export default function HomeFeatureBooks() {
+  return (
+    <div>
+      <HomeFeatureBooksHeader />
+      <HomeFeatureBooksContent />
+    </div>
+  );
+}
