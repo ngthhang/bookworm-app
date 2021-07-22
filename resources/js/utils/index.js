@@ -31,3 +31,13 @@ export const getQueryString = (props) => {
   rating !== null ? result.push(`rating=${rating}`) : null;
   return result.join('&');
 };
+
+export const getQueryStringForReview = (props) => {
+  let result = [];
+  const { sortType, filter, currentPage, showInPage } = props;
+  sortType !== null ? result.push(`sort=${sortType}`) : null;
+  filter !== null ? result.push(`filter=${filter}`) : null;
+  currentPage !== null ? result.push(`page=${currentPage}`) : null;
+  showInPage !== null ? result.push(`per_page=${showInPage}`) : null;
+  return result.join('&');
+};

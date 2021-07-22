@@ -16,6 +16,13 @@ import {
   changeCurrentPage
 } from './sortAction';
 import { updateList, sortListActions } from './sortListAction';
+import {
+  sortReviewActions,
+  changePageInReview,
+  setFilter,
+  setPerPage,
+  sortByDate
+} from './sortReviewAction';
 import { VisibilityFilters, setVisibilityFilter } from './visibilityFilter';
 
 export {
@@ -35,5 +42,10 @@ export {
   setShowPage,
   changeCurrentPage,
   updateList,
-  sortListActions
+  sortListActions,
+  sortReviewActions,
+  changePageInReview,
+  setFilter,
+  setPerPage,
+  sortByDate
 };

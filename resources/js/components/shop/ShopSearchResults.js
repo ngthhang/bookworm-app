@@ -50,6 +50,8 @@ function ShopSearchResults({ dispatch, sort, sortList }) {
     dispatch(changeCurrentPage(value));
   };
 
+  console.log(books);
+
   return (
     <Row gutter={[8, 16]}>
       <Col span={24} sm={24} md={12} xl={12} lg={12}>

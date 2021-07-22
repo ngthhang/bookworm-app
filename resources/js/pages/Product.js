@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Button, Result } from 'antd';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 import {
   ProductInfo,
   ProductPrice,
@@ -23,7 +24,7 @@ function Product(props) {
     if (res.status === 404) {
       changeError(true);
     } else {
-      setData(res.data);
+      setData(res.data.books);
     }
     setLoading(false);
   }, [id]);
@@ -48,8 +49,7 @@ function Product(props) {
   }
 
   if (!loading) {
-    console.log(data);
-    const { author, discounts, reviews, category, book_price } = data;
+    const { category } = data;
     const { category_name } = category;
 
     return (
@@ -64,7 +64,7 @@ function Product(props) {
             <ProductPrice {...data} />
           </Col>
           <Col span={24} sm={24} md={24} xl={17} lg={17}>
-            <ProductRating />
+            <ProductRating id={data.id} />
           </Col>
           <Col span={24} sm={24} md={24} xl={7} lg={7}>
             <ProductReviewForm />
@@ -77,4 +77,4 @@ function Product(props) {
   return null;
 }
 
-export default Product;
+export default connect()(Product);

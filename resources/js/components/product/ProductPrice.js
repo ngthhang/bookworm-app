@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography, Button } from 'antd';
+import React, { useState } from 'react';
+import { Card, Row, Col, Typography, Button, notification } from 'antd';
 import { connect } from 'react-redux';
 import { PriceTag } from '../general';
 import { Redirect } from 'react-router-dom';
@@ -68,8 +68,23 @@ function ProductPrice(props) {
       book_cover_photo: book_cover_photo,
       quantity: quantity
     };
+    showNotification(
+      'success',
+      'Successfully added to cart',
+      'Go to your cart to finish order books'
+    );
     dispatch(addToCart(item));
-    enableRedirect(true);
+    setTimeout(() => {
+      enableRedirect(true);
+    }, 1000);
+  };
+
+  const showNotification = (type, title, message) => {
+    notification[type]({
+      placement: 'bottomRight',
+      message: title,
+      description: message
+    });
   };
 
   if (redirect) {

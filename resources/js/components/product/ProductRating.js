@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import ProductRatingFilter from './ProductRatingFilter';
 import ProductRatingList from './ProductRatingList';
 
-export default function ProductRating() {
+function ProductRating({ id }) {
   return (
     <Card style={{ width: '100%' }}>
-      <ProductRatingFilter />
-      <ProductRatingList />
+      <>
+        <ProductRatingFilter />
+        <ProductRatingList id={id} />
+      </>
     </Card>
   );
 }
+
+export default ProductRating;

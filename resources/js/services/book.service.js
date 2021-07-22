@@ -46,6 +46,16 @@ export const getBookById = async (id) => {
   }
 };
 
+export const getBookByIdAndQueryStr = async (id, query) => {
+  try {
+    const res = await axios.get(`/books/${id}?${query}`);
+    return res;
+  } catch (e) {
+    console.log('Error: ' + e.message);
+    return { status: 404 };
+  }
+};
+
 export const getBooksByFilter = async (queryStr) => {
   try {
     const res = await axios.get(`/books?${queryStr}`);
