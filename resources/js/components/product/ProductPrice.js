@@ -78,7 +78,7 @@ function ProductPrice(props) {
 
   return (
     <Card
-      title={<PriceTag bookPrice={book_price} discountPrice={book_price} />}
+      title={<PriceTag bookPrice={book_price} discountPrice={discountPrice} />}
       style={{ width: '100%' }}
     >
       <div className="d-flex flex-column align-items-start justify-content-center">

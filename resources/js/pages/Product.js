@@ -8,6 +8,7 @@ import {
   ProductReviewForm
 } from '../components/product';
 import { getBookById } from '../services/book.service';
+import { AppBackTop } from '../components/general';
 
 function Product(props) {
   const { id } = props;
@@ -68,6 +69,7 @@ function Product(props) {
           <Col span={24} sm={24} md={24} xl={7} lg={7}>
             <ProductReviewForm />
           </Col>
+          <AppBackTop />
         </Row>
       </div>
     );

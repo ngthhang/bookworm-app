@@ -16,20 +16,63 @@ class BookController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    // return $recommendedBooks;
-  }
+    $sort_type = $request->has('sort_type') ? $request->query('sort_type') : null;
+    $limit = $request->has('limit') ? $request->query('limit') : null;
+    $per_page = $request->has('per_page') ? $request->query('per_page') : null;
+    $author = $request->has('author') ? $request->query('author') : null;
+    $category = $request->has('category') ? $request->query('category') : null;
+    $rating = $request->has('rating') ? $request->query('rating') : null;
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $request)
-  {
-    //
+    switch ($sort_type) {
+      case 'SORT_BY_HOME_SALES':
+        $books = Book::getBooksOnSale();
+        break;
+      case 'SORT_BY_RECOMMENDED':
+        $books = Book::getBooksRecommended();
+        break;
+      case 'SORT_BY_POPULAR':
+        $books = Book::getBooksPopular();
+        break;
+      case 'SORT_BY_SALES':
+        $books = Book::getBooksOnSale()
+          ->getFinalPrice()
+          ->orderBy('final_price', 'asc');
+        break;
+      case 'SORT_BY_LOW_TO_HIGH':
+        $books = Book::getBooks()->orderBy('final_price', 'asc');
+        break;
+      case 'SORT_BY_HIGH_TO_LOW':
+        $books = Book::getBooks()->orderBy('final_price', 'desc');
+        break;
+      default:
+        return response('Not exist sort type name: ' . $sort_type, 404);
+    }
+
+    if ($author !== null) {
+      $books = $books->having('books.author_id', '=', $author);
+    }
+
+    if ($category !== null) {
+      $books = $books->having('books.category_id', '=', $category);
+    }
+
+    if ($rating !== null) {
+      $books = $books
+        ->getAvgRating()
+        ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price')
+        ->getBooksWithRatingFilter($rating);
+    }
+    if ($limit !== null) {
+      $books = $books->limit($limit)->get();
+    }
+
+    if ($per_page !== null) {
+      $books = $books->paginate($per_page ?? 20);
+    }
+
+    return $books;
   }
 
   /**
@@ -40,29 +83,7 @@ class BookController extends Controller
    */
   public function show($id)
   {
-    //
-  }
-
-  /**
-   * Update the specified resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function update(Request $request, $id)
-  {
-    //
-  }
-
-  /**
-   * Remove the specified resource from storage.
-   *
-   * @param  int  $id
-   * @return \Illuminate\Http\Response
-   */
-  public function destroy($id)
-  {
-    //
+    $book = Book::with('author', 'reviews', 'discounts', 'category')->findOrFail($id);
+    return $book;
   }
 }

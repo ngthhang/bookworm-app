@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\BookController;
 use App\Http\Controllers\Api\AuthorController;
 use App\Http\Controllers\Api\CategoryController;
@@ -23,18 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
   return $request->user();
 });
 
-Route::apiResources([
-  'books' => BookController::class,
-  'authors' => AuthorController::class,
-  'categories' => CategoryController::class,
-]);
-
-Route::prefix('home')->group(function () {
-  Route::get('/on-sale', [HomeController::class, 'getBooksOnSale']);
-  Route::get('/recommended', [HomeController::class, 'getBooksRecommended']);
-  Route::get('/popular', [HomeController::class, 'getBooksPopular']);
-});
-
-Route::prefix('product')->group(function () {
-  Route::get('/{id}', [ProductController::class, 'show']);
-});
+Route::apiResource('authors', AuthorController::class)->only('index');
+Route::apiResource('categories', CategoryController::class)->only('index');
+Route::apiResource('books', BookController::class)->only('show', 'index');

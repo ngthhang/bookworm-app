@@ -7,7 +7,11 @@ const formatNum = (number) => {
 function PriceTag(props) {
   const { discountPrice, bookPrice, className } = props;
   if (discountPrice === null || discountPrice === undefined) {
-    return <span className="card-price">${formatNum(bookPrice)}</span>;
+    return (
+      <div className={className}>
+        <span className="card-price">${formatNum(bookPrice)}</span>
+      </div>
+    );
   } else {
     return (
       <div className={className}>

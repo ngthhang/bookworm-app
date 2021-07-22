@@ -1,4 +1,5 @@
 import React from 'react';
+import { AppBackTop } from '../components/general';
 import { HomeOnSale, HomeFeatureBooks } from '../components/home';
 
 function Home() {
@@ -6,6 +7,7 @@ function Home() {
     <div className="home-page">
       <HomeOnSale />
       <HomeFeatureBooks />
+      <AppBackTop />
     </div>
   );
 }

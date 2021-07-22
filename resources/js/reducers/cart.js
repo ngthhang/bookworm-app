@@ -5,25 +5,29 @@ const initialState = {
   cartList: []
 };
 
+const { ADD_TO_CART, REMOVE_CART, ADD_QUANTITY_CART, MINUS_QUANTITY_CART } =
+  cartActions;
+
 const cart = (state = initialState, action) => {
+  const { cartList, totalCart } = state;
   switch (action.type) {
-    case cartActions.ADD_TO_CART:
-      state.cartList.push(action.item);
+    case ADD_TO_CART:
+      cartList.push(action.item);
       return {
-        totalCart: state.totalCart + 1,
-        cartList: state.cartList
+        totalCart: totalCart + 1,
+        cartList: cartList
       };
-    case cartActions.REMOVE_CART:
+    case REMOVE_CART:
       return {
-        totalCart: state.totalCart - 1,
-        cartList: state.cartList.filter((item) => {
+        totalCart: totalCart - 1,
+        cartList: cartList.filter((item) => {
           return item.id !== action.id;
         })
       };
-    case cartActions.ADD_QUANTITY_CART:
+    case ADD_QUANTITY_CART:
       return {
         ...state,
-        cartList: state.cartList.map((item) => {
+        cartList: cartList.map((item) => {
           if (item.id === action.id) {
             return {
               ...item,
@@ -32,10 +36,10 @@ const cart = (state = initialState, action) => {
           } else return item;
         })
       };
-    case cartActions.MINUS_QUANTITY_CART:
+    case MINUS_QUANTITY_CART:
       return {
         ...state,
-        cartList: state.cartList.map((item) => {
+        cartList: cartList.map((item) => {
           if (item.id === action.id) {
             return {
               ...item,

@@ -29,15 +29,7 @@ class Book extends Model
 
   public function discounts()
   {
-    return $this->hasMany(Discount::class)->getAvailableDiscount();
-  }
-
-  public function scopeJoinDiscount($query, $typeJoin)
-  {
-    if ($typeJoin === 'inner') {
-      return $query->join('discounts', 'discounts.book_id', '=', 'books.id');
-    }
-    return $query->leftJoin('discounts', 'discounts.book_id', '=', 'books.id');
+    return $this->hasMany(Discount::class)->getDiscount();
   }
 
   public function scopeJoinAuthor($query)
@@ -72,7 +64,7 @@ class Book extends Model
     );
   }
 
-  public function scopeGetAvailableDiscount($query)
+  public function scopetAvailableDiscount($query)
   {
     return $query->whereDate('discount_start_date', '<=', now())
       ->where(function ($query) {
@@ -88,45 +80,86 @@ class Book extends Model
 
   public function scopeGetAvgRating($query)
   {
-    return $query->addSelect(DB::raw('ROUND(SUM(CAST(rating_start AS decimal))/COUNT(reviews.id), 2) AS avg_rating'));
+    return $query->addSelect(DB::raw('ROUND(SUM(CAST(rating_start as decimal))/COUNT(reviews.id), 2) as avg_rating'));
+  }
+
+  public function scopeGetBooksWithRatingFilter($query, $rating)
+  {
+    $query->having(DB::raw('ROUND(SUM(CAST(rating_start as decimal))/COUNT(reviews.id), 2)'), '>=', $rating);
   }
 
   public function scopeGetBooksOnSale($query)
   {
-    return $query->joinDiscount('inner')
-      ->getAvailableDiscount()
+    return $query->join('discounts', function ($join) {
+      $join->on('books.id', '=', 'discounts.book_id')
+        ->whereDate('discount_start_date', '<=', now())
+        ->where(function ($query) {
+          $query->whereDate('discount_end_date', '>', now())
+            ->orWhereNull('discount_end_date');
+        });
+    })
       ->joinAuthor()
+      ->joinReviews()
       ->selectInfoCardBook()
       ->getSubPrice()
-      ->orderBy('sub_price', 'desc')
-      ->limit(10);
+      ->groupBy("books.id", "discounts.discount_price", "authors.author_name")
+      ->orderBy('sub_price', 'desc');
   }
 
   public function scopeGetBooksRecommended($query)
   {
-    return $query->joinDiscount('left')
-      ->getAvailableDiscount()
+    return $query->leftJoin('discounts', function ($join) {
+      $join->on('books.id', '=', 'discounts.book_id')
+        ->whereDate('discount_start_date', '<=', now())
+        ->where(function ($query) {
+          $query->whereDate('discount_end_date', '>', now())
+            ->orWhereNull('discount_end_date');
+        });
+    })
       ->joinReviews()
       ->joinAuthor()
       ->selectInfoCardBook()
       ->getAvgRating()
+      ->distinct()
       ->orderBy('avg_rating', 'desc')
-      ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price')
-      ->limit(8);
+      ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price');
   }
 
   public function scopeGetBooksPopular($query)
   {
-    return $query->joinDiscount('left')
-      ->getAvailableDiscount()
+    return $query->leftJoin('discounts', function ($join) {
+      $join->on('books.id', '=', 'discounts.book_id')
+        ->whereDate('discount_start_date', '<=', now())
+        ->where(function ($query) {
+          $query->whereDate('discount_end_date', '>', now())
+            ->orWhereNull('discount_end_date');
+        });
+    })
       ->joinAuthor()
       ->joinReviews()
       ->selectInfoCardBook()
       ->getTotalReviews()
       ->getFinalPrice()
+      ->distinct()
       ->orderBy('total_reviews', 'desc')
       ->orderBy('final_price', 'asc')
-      ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price')
-      ->limit(8);
+      ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price');
+  }
+
+  public function scopeGetBooks($query)
+  {
+    return $query->leftJoin('discounts', function ($join) {
+      $join->on('books.id', '=', 'discounts.book_id')
+        ->whereDate('discount_start_date', '<=', now())
+        ->where(function ($query) {
+          $query->whereDate('discount_end_date', '>', now())
+            ->orWhereNull('discount_end_date');
+        });
+    })
+      ->joinAuthor()
+      ->joinReviews()
+      ->selectInfoCardBook()
+      ->getFinalPrice()
+      ->distinct();
   }
 }

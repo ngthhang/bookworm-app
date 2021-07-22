@@ -17,7 +17,7 @@ class AuthorController extends Controller
    */
   public function index()
   {
-    $author = Author::get();
+    $author = Author::orderBy('author_name')->get();
     return $author;
   }
 

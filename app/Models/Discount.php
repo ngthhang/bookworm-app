@@ -16,7 +16,7 @@ class Discount extends Model
     return $this->belongsTo(Book::class);
   }
 
-  public function scopeGetAvailableDiscount($query)
+  public function scopeGetDiscount($query)
   {
     return $query->where('discount_start_date', '<=', now())
       ->where(function ($query) {

@@ -18,3 +18,16 @@ export const getTotalPriceItems = (bookPrice, discountPrice, quantity) => {
     ? Math.round(discountPrice * quantity * 1000) / 1000
     : Math.round(bookPrice * quantity * 1000) / 1000;
 };
+
+export const getQueryString = (props) => {
+  const { sortType, perPage, author, category, rating, currentPage } = props;
+  let result = [];
+  sortType !== null ? result.push(`sort_type=${sortType}`) : null;
+  perPage !== null
+    ? result.push(`per_page=${perPage}&page=${currentPage}`)
+    : null;
+  author !== null ? result.push(`author=${author.id}`) : null;
+  category !== null ? result.push(`category=${category.id}`) : null;
+  rating !== null ? result.push(`rating=${rating}`) : null;
+  return result.join('&');
+};

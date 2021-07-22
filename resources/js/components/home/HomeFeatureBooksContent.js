@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CardBook from '../general/CardBook';
-import { Row, Col } from 'antd';
+import { Row, Col, Spin } from 'antd';
 import { connect } from 'react-redux';
 import {
   getPopularBooks,
@@ -24,33 +24,41 @@ function HomeFeatureBooksContent({ visibilityFilter }) {
       console.log(res);
     }
     setData(res);
-    setLoading(false);
+    setTimeout(() => {
+      setLoading(false);
+    }, 500);
   }, [visibilityFilter]);
-
-  console.log(visibilityFilter);
 
   return (
     <Row
       gutter={[16, 24]}
       className="mt-5 d-flex align-items-center justify-content-center"
     >
-      {!loading
-        ? data.length > 0 &&
-          data.map((item) => (
-            <Col
-              key={item.id}
-              span={24}
-              sm={12}
-              md={8}
-              xl={5}
-              lg={6}
-              flex={1}
-              className="d-flex align-self-stretch h-100"
-            >
-              <CardBook className="h-100" {...item} />
-            </Col>
-          ))
-        : '...loading'}
+      {!loading ? (
+        data.length > 0 &&
+        data.map((item) => (
+          <Col
+            key={item.id}
+            span={24}
+            sm={12}
+            md={8}
+            xl={5}
+            lg={6}
+            flex={1}
+            className="d-flex align-self-stretch h-100"
+          >
+            <CardBook {...item} />
+          </Col>
+        ))
+      ) : (
+        <Col
+          span={24}
+          style={{ height: 500 }}
+          className="d-flex align-items-center justify-content-center"
+        >
+          <Spin />
+        </Col>
+      )}
     </Row>
   );
 }

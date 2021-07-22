@@ -11,8 +11,6 @@ function HomeFeatureBooksHeader({ visibilityFilter, dispatch }) {
     color: '#f0f0f0'
   };
 
-  console.log(isRecommended);
-
   const btnStyleDisabled = {
     backgroundColor: '#f0f0f0',
     borderColor: '#f0f0f0',
