@@ -36,7 +36,8 @@ const bodyCardHiding = {
   display: 'none'
 };
 
-function ShopFilter({ dispatch }) {
+function ShopFilter({ dispatch, sort }) {
+  const { category, author, rating } = sort;
   const [hideAuthor, toggleHidingAuthor] = useState(true);
   const [hideRating, toggleHidingRating] = useState(true);
   const [hideCategory, toggleHidingCategory] = useState(true);
@@ -48,40 +49,69 @@ function ShopFilter({ dispatch }) {
     const categoriesData = await getAllCategories();
     setAuthors(authorData);
     setCategories(categoriesData);
-  }, []);
+  }, [sort]);
+
+  const onFilterCategory = (item) => {
+    dispatch(filterByCategory(item));
+  };
+
+  const onFilterAuthor = (item) => {
+    dispatch(filterByAuthor(item));
+  };
+
+  const onFilterRating = (item) => {
+    dispatch(filterByRating(item));
+  };
 
   return (
-    <Row type="flex" gutter={[8, 16]} className="pb-4">
+    <Row type="flex" gutter={[8, 8]} className="pb-4">
       <Col span={24}>
-        <span>Filter By</span>
+        <Text strong>Filter By</Text>
       </Col>
       <Col span={24} sm={24} md={8} xl={24} lg={24}>
         <Card
           size="small"
+          headStyle={{ backgroundColor: '#F9F0FF', borderColor: '#d3adf7' }}
           title={
             <Button
               onClick={() => toggleHidingCategory(!hideCategory)}
               style={btnCardHeaderStyle}
               type="link"
             >
-              <Text strong>Category</Text>
-              {hideCategory ? <CaretDownFilled /> : <CaretUpFilled />}
+              <Text style={{ color: '#531dab' }} strong>
+                Category
+              </Text>
+              {hideCategory ? (
+                <CaretDownFilled style={{ color: '#531dab' }} />
+              ) : (
+                <CaretUpFilled style={{ color: '#531dab' }} />
+              )}
             </Button>
           }
           bodyStyle={!hideCategory ? bodyCardStyle : bodyCardHiding}
           style={cardStyle}
         >
           {categories && categories.length > 0 ? (
-            categories.map((item) => (
-              <Button
-                type="link"
-                className="d-flex"
-                key={item.id}
-                onClick={() => dispatch(filterByCategory(item))}
-              >
-                <Link className="text-wrap">{item.category_name}</Link>
-              </Button>
-            ))
+            categories.map((item) => {
+              let cate = item.category_name;
+              let cateFirstUpperCase =
+                cate.charAt(0).toUpperCase() + cate.slice(1);
+              return (
+                <Button
+                  type="link"
+                  className="d-flex"
+                  key={item.id}
+                  disabled={
+                    category !== null &&
+                    category !== undefined &&
+                    item.category_name === category.category_name
+                  }
+                  onClick={() => onFilterCategory(item)}
+                >
+                  <Link className="text-wrap">{cateFirstUpperCase}</Link>
+                </Button>
+              );
+            })
           ) : (
             <Empty />
           )}
@@ -90,14 +120,21 @@ function ShopFilter({ dispatch }) {
       <Col span={24} sm={16} md={8} xl={24} lg={24}>
         <Card
           size="small"
+          headStyle={{ backgroundColor: '#e6f7ff', borderColor: '#91d5ff' }}
           title={
             <Button
               onClick={() => toggleHidingAuthor(!hideAuthor)}
               style={btnCardHeaderStyle}
               type="link"
             >
-              <Text strong>Author</Text>
-              {hideAuthor ? <CaretDownFilled /> : <CaretUpFilled />}
+              <Text style={{ color: '#096dd9' }} strong>
+                Author
+              </Text>
+              {hideAuthor ? (
+                <CaretDownFilled style={{ color: '#096dd9' }} />
+              ) : (
+                <CaretUpFilled style={{ color: '#096dd9' }} />
+              )}
             </Button>
           }
           bodyStyle={!hideAuthor ? bodyCardStyle : bodyCardHiding}
@@ -109,7 +146,12 @@ function ShopFilter({ dispatch }) {
                 type="link"
                 key={item.id}
                 className="my-1"
-                onClick={() => dispatch(filterByAuthor(item))}
+                disabled={
+                  author !== null &&
+                  author !== undefined &&
+                  item.author_name === author.author_name
+                }
+                onClick={() => onFilterAuthor(item)}
               >
                 <Link className="text-wrap">{item.author_name}</Link>
               </Button>
@@ -122,14 +164,21 @@ function ShopFilter({ dispatch }) {
       <Col span={24} sm={8} md={8} xl={24} lg={24}>
         <Card
           size="small"
+          headStyle={{ backgroundColor: '#fffbe6', borderColor: '#ffe58f' }}
           title={
             <Button
               onClick={() => toggleHidingRating(!hideRating)}
               style={btnCardHeaderStyle}
               type="link"
             >
-              <Text strong>Rating Reviews</Text>
-              {hideRating ? <CaretDownFilled /> : <CaretUpFilled />}
+              <Text strong style={{ color: '#d48806' }}>
+                Rating Review
+              </Text>
+              {hideRating ? (
+                <CaretDownFilled style={{ color: '#d48806' }} />
+              ) : (
+                <CaretUpFilled style={{ color: '#d48806' }} />
+              )}
             </Button>
           }
           bodyStyle={!hideRating ? bodyCardStyle : bodyCardHiding}
@@ -138,8 +187,11 @@ function ShopFilter({ dispatch }) {
           {[1, 2, 3, 4, 5].map((item) => (
             <Button
               key={item}
+              disabled={
+                rating !== null && rating !== undefined && item === rating
+              }
               type="link"
-              onClick={() => dispatch(filterByRating(item))}
+              onClick={() => onFilterRating(item)}
             >
               {item} Star
             </Button>
@@ -150,4 +202,8 @@ function ShopFilter({ dispatch }) {
   );
 }
 
-export default connect()(ShopFilter);
+const mapStateToProps = (state) => ({
+  sort: state.sort
+});
+
+export default connect(mapStateToProps)(ShopFilter);

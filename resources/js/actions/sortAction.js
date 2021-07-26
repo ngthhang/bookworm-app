@@ -4,7 +4,8 @@ export const sortActions = {
   FILTER_BY_RATING: 'FILTER_BY_RATING',
   SET_SORT_TYPE: 'SET_SORT_TYPE',
   SHOW_IN_PAGE: 'SHOW_IN_PAGE',
-  CHANGE_CURRENT_PAGE: 'CHANGE_CURRENT_PAGE'
+  CHANGE_CURRENT_PAGE: 'CHANGE_CURRENT_PAGE',
+  SET_INIT: 'SET_INIT'
 };
 
 export const sortTypes = {
@@ -43,4 +44,8 @@ export const setShowPage = (number) => ({
 export const changeCurrentPage = (number) => ({
   type: 'CHANGE_CURRENT_PAGE',
   number
+});
+
+export const setInit = () => ({
+  type: 'SET_INIT'
 });

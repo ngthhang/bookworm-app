@@ -39,13 +39,13 @@ function HomeFeatureBooksContent({ visibilityFilter }) {
         data.map((item) => (
           <Col
             key={item.id}
-            span={24}
+            span={22}
             sm={12}
             md={8}
             xl={5}
             lg={6}
             flex={1}
-            className="d-flex align-self-stretch h-100"
+            className="d-flex align-items-center justify-content-center"
           >
             <CardBook {...item} />
           </Col>
@@ -56,7 +56,7 @@ function HomeFeatureBooksContent({ visibilityFilter }) {
           style={{ height: 500 }}
           className="d-flex align-items-center justify-content-center"
         >
-          <Spin />
+          <Spin size="large" />
         </Col>
       )}
     </Row>

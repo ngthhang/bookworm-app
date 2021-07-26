@@ -1,5 +1,7 @@
 import React from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Typography } from 'antd';
+
+const { Paragraph } = Typography;
 
 function About() {
   return (
@@ -7,7 +9,7 @@ function About() {
       <h4>About Us</h4>
       <hr />
       <div className="pb-5 mb-5 w-100 d-flex flex-column align-items-center justify-content-center">
-        <Row className="w-75 mb-5">
+        <Row className="w-75 mb-3">
           <Col
             offset={2}
             span={20}

@@ -80,21 +80,35 @@ export default class HomeOnSaleCarousel extends Component {
     };
 
     return (
-      <Row>
-        <Col span={1} className="d-flex align-items-center">
+      <Row gutter={[32, 0]}>
+        <Col span={2} className="d-flex align-items-center">
           <CarouselPrevButton onClick={this.prev} />
         </Col>
-        <Col offset={1} span={20}>
+        <Col span={20}>
           {!isLoading ? (
-            <Carousel {...carouselProps} ref={(node) => (this.carousel = node)}>
+            <Carousel
+              dots={false}
+              {...carouselProps}
+              ref={(node) => (this.carousel = node)}
+            >
               {booksOnSale.length > 0 &&
                 booksOnSale.map((item) => (
                   <CardBook className="mx-2" {...item} key={item.id} />
                 ))}
             </Carousel>
-          ) : null}
+          ) : (
+            <div
+              className="d-flex align-items-center justify-content-center w-100"
+              style={{ height: 400 }}
+            >
+              <Spin size="large" />
+            </div>
+          )}
         </Col>
-        <Col offset={1} span={1} className="d-flex align-items-center">
+        <Col
+          span={2}
+          className="d-flex align-items-center justify-content-center"
+        >
           <CarouselNextButton onClick={this.next} />
         </Col>
       </Row>

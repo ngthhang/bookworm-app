@@ -5,7 +5,7 @@ import { AppBackTop } from '../components/general';
 
 function Shop() {
   return (
-    <div className="mt-5 mx-5 mb-5 pb-5">
+    <div className="home-page mx-5 pb-5">
       <ShopHeader />
       <Row gutter={[16, 0]} type="flex">
         <Col span={24} sm={24} md={24} xl={5} lg={6}>

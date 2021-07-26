@@ -3,7 +3,8 @@ import {
   deleteFromCart,
   minusQuantity,
   addQuantity,
-  cartActions
+  cartActions,
+  deleteAll
 } from './cartAction';
 import {
   sortActions,
@@ -21,7 +22,9 @@ import {
   changePageInReview,
   setFilter,
   setPerPage,
-  sortByDate
+  sortByDate,
+  updateListReview,
+  setInit
 } from './sortReviewAction';
 import { VisibilityFilters, setVisibilityFilter } from './visibilityFilter';
 
@@ -39,6 +42,7 @@ export {
   filterByRating,
   setSortType,
   sortTypes,
+  updateListReview,
   setShowPage,
   changeCurrentPage,
   updateList,
@@ -46,6 +50,8 @@ export {
   sortReviewActions,
   changePageInReview,
   setFilter,
+  setInit,
   setPerPage,
-  sortByDate
+  sortByDate,
+  deleteAll
 };

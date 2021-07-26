@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Row, Col, Select, Pagination, Empty } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Select, Pagination, Empty, Spin } from 'antd';
 import CardBook from '../general/CardBook';
 import { connect } from 'react-redux';
 import {
@@ -21,21 +21,22 @@ const {
 } = sortTypes;
 
 function ShopSearchResults({ dispatch, sort, sortList }) {
+  const [loading, setLoading] = useState(true);
   const { books, totalBooks } = sortList;
   const { perPage, currentPage, sortType } = sort;
   let start = totalBooks > 0 ? (currentPage - 1) * perPage + 1 : null;
-  let end = totalBooks > 0 ? currentPage * perPage + 1 : null;
+  let end = totalBooks > 0 ? currentPage * perPage : null;
   if (end > totalBooks) {
     end = totalBooks;
   }
 
   useEffect(async () => {
+    setLoading(true);
     const query = await getQueryString(sort);
-    console.log(query);
     const res = await getBooksByFilter(query);
     const { data } = res;
     dispatch(updateList(data));
-    console.log(data);
+    setLoading(false);
   }, [sort]);
 
   const handleChangeSort = (value) => {
@@ -49,8 +50,6 @@ function ShopSearchResults({ dispatch, sort, sortList }) {
   const onChangePage = (value) => {
     dispatch(changeCurrentPage(value));
   };
-
-  console.log(books);
 
   return (
     <Row gutter={[8, 16]}>
@@ -92,9 +91,16 @@ function ShopSearchResults({ dispatch, sort, sortList }) {
       </Col>
       <Col span={24} style={{ minHeight: '100%' }}>
         <Row gutter={[24, 32]}>
-          {books && books.length > 0 ? (
+          {loading ? (
+            <div
+              className="w-100 d-flex align-items-center justify-content-center"
+              style={{ height: 200 }}
+            >
+              <Spin size="large" />
+            </div>
+          ) : books && books.length > 0 ? (
             books.map((item) => (
-              <Col key={item.id} span={24} sm={12} md={8} xl={6} lg={6}>
+              <Col key={item.id} span={24} sm={12} md={8} xl={6} lg={8}>
                 <CardBook {...item} />
               </Col>
             ))
@@ -113,13 +119,14 @@ function ShopSearchResults({ dispatch, sort, sortList }) {
         span={24}
         className="d-flex align-items-center justify-content-center mt-3 mb-5 pb-5"
       >
-        {totalBooks > 0 ? (
+        {!loading && totalBooks > 0 ? (
           <Pagination
             showSizeChanger={false}
             current={currentPage}
             defaultCurrent={1}
             total={totalBooks}
             pageSize={perPage}
+            responsive={true}
             onChange={onChangePage}
           />
         ) : null}

@@ -5,8 +5,13 @@ const initialState = {
   cartList: []
 };
 
-const { ADD_TO_CART, REMOVE_CART, ADD_QUANTITY_CART, MINUS_QUANTITY_CART } =
-  cartActions;
+const {
+  ADD_TO_CART,
+  REMOVE_CART,
+  ADD_QUANTITY_CART,
+  MINUS_QUANTITY_CART,
+  DELETE_CART
+} = cartActions;
 
 const cart = (state = initialState, action) => {
   const { cartList, totalCart } = state;
@@ -24,6 +29,10 @@ const cart = (state = initialState, action) => {
           return item.id !== action.id;
         })
       };
+    case DELETE_CART:
+      return {
+        ...initialState
+      };
     case ADD_QUANTITY_CART:
       return {
         ...state,
@@ -31,7 +40,7 @@ const cart = (state = initialState, action) => {
           if (item.id === action.id) {
             return {
               ...item,
-              quantity: item.quantity + 1
+              quantity: item.quantity + action.quantity
             };
           } else return item;
         })

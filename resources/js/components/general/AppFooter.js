@@ -1,5 +1,8 @@
 import React from 'react';
-import Icon from '../../../assets/bookworm_icon.svg';
+import { Typography } from 'antd';
+import Icon from '../../../assets/footer_icon.svg';
+
+const { Text } = Typography;
 
 export default function AppFooter() {
   return (
@@ -7,13 +10,13 @@ export default function AppFooter() {
       <img
         src={Icon}
         alt="React Logo"
-        style={{ width: 70, height: 20 }}
+        style={{ width: 50, height: 'auto' }}
         className=" img-fluid"
       />
       <div className="d-flex flex-column ml-4">
-        <span>BOOKWORM</span>
-        <span>Address</span>
-        <span>Code</span>
+        <Text style={{ letterSpacing: '1px' }}>BOOKWORM</Text>
+        <Text>The Nashtech Rookies</Text>
+        <Text>2021</Text>
       </div>
     </footer>
   );

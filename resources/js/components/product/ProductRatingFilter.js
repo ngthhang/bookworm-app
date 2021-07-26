@@ -1,33 +1,37 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Select, Space, Rate, Typography, Divider } from 'antd';
 import { connect } from 'react-redux';
-import { setShowPage, setFilter, sortByDate } from '../../actions/';
+import { setShowPage, setFilter, sortByDate, setInit } from '../../actions/';
 
 const { Option } = Select;
 const { Title, Text, Link } = Typography;
 
 function ProductRatingFilter(props) {
-  const { sortReview, sortReviewList, dispatch } = props;
-  const { filter, showInPage } = sortReview;
+  const { sortReview, sortReviewList, dispatch, id } = props;
+  const { filter, showInPage, currentPage } = sortReview;
   const { reviewsFirst, reviews } = sortReviewList;
   const { total, current_page, per_page } = reviews;
-  let disabled = true;
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    setDisabled(true);
+    console.log('LOAD FILTER');
+    if (JSON.stringify(sortReviewList.reviewsFirst) !== JSON.stringify({})) {
+      setDisabled(false);
+    }
+  }, [id, sortReviewList]);
 
   const getStart = () => {
-    return total > 0 ? (current_page - 1) * per_page + 1 : null;
+    return total > 0 ? (currentPage - 1) * showInPage + 1 : null;
   };
 
   const getEnd = () => {
-    let end = total > 0 ? current_page * per_page + 1 : null;
+    let end = total > 0 ? currentPage * showInPage : null;
     if (end > total) {
       end = total;
     }
     return end;
   };
-
-  if (JSON.stringify(reviewsFirst) !== JSON.stringify({})) {
-    disabled = false;
-  }
 
   const getQuantityRate = (rate) => {
     const { data } = reviewsFirst;
@@ -51,7 +55,7 @@ function ProductRatingFilter(props) {
       result = result + countRate * item;
       count = count + countRate;
     });
-    return result / count;
+    return Math.round(parseFloat(result / count) * 100) / 100;
   };
 
   const handleShowInPage = (value) => {
@@ -76,8 +80,8 @@ function ProductRatingFilter(props) {
           Customer Reviews
         </Title>
         <Title level={5} type="secondary" className="mt-2">
-          Filtered by{' '}
-          {filter !== 'all' ? (
+          {!disabled && filter !== 'all' ? 'Filtered by' : null}{' '}
+          {!disabled && filter !== 'all' ? (
             <Text code strong>
               {filter} Star
             </Text>
@@ -116,8 +120,8 @@ function ProductRatingFilter(props) {
       </Col>
       <Col span={24} sm={24} md={10} xl={13} lg={9}>
         <span>
-          Showing {getStart()} - {getEnd()} of{' '}
-          {!disabled ? reviewsFirst.total : 0} reviews
+          Showing {getStart()} - {getEnd()} of {!disabled ? reviews.total : 0}{' '}
+          reviews
         </span>
       </Col>
       <Col span={24} sm={24} md={14} xl={11} lg={15}>

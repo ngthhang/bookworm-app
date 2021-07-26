@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
+import { setInit } from '../../actions/sortAction';
 import { Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default function HomeOnSaleHeader() {
+function HomeOnSaleHeader(props) {
   const [isRedirect, enableRedirect] = useState(false);
+  const { dispatch } = props;
 
   if (isRedirect) {
+    dispatch(setInit());
     return <Redirect to="/shop" />;
   }
 
@@ -27,3 +31,5 @@ export default function HomeOnSaleHeader() {
     </div>
   );
 }
+
+export default connect()(HomeOnSaleHeader);

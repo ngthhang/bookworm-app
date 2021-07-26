@@ -3,7 +3,7 @@ import { Card, Row, Col, Typography, Button, notification } from 'antd';
 import { connect } from 'react-redux';
 import { PriceTag } from '../general';
 import { Redirect } from 'react-router-dom';
-import { addToCart } from '../../actions';
+import { addToCart, addQuantity } from '../../actions';
 import QuantityAdjustBtnGroup from '../general/QuantityAdjustBtnGroup';
 
 const { Title } = Typography;
@@ -26,7 +26,7 @@ const btnStyleDisabled = {
 };
 
 function ProductPrice(props) {
-  const { discounts, book_price, cart, id } = props;
+  const { discounts, book_price, cart, id, dispatch } = props;
   const { cartList } = cart;
   const [quantity, setQuantity] = useState(1);
   const [redirect, enableRedirect] = useState(false);
@@ -36,54 +36,70 @@ function ProductPrice(props) {
     discountPrice = discounts[0].discount_price;
   }
 
-  cartList.map((item) => {
-    if (item.id === id) {
-      isItemInCart = true;
-      return;
-    }
-  });
-
-  const addQuantity = () => {
+  const add = () => {
     if (quantity < 8) {
       setQuantity(quantity + 1);
     }
   };
 
-  const minusQuantity = () => {
+  const minus = () => {
     if (quantity !== 1) {
       setQuantity(quantity - 1);
     }
   };
 
   const addItemToCart = () => {
-    const { id, book_title, book_price, author, dispatch, book_cover_photo } =
-      props;
-    const { author_name } = author;
-    const item = {
-      id: id,
-      book_title: book_title,
-      book_price: book_price,
-      author_name: author_name,
-      discount_price: discountPrice,
-      book_cover_photo: book_cover_photo,
-      quantity: quantity
-    };
+    let isItemInCart = false;
+    let itemInCart = {};
+    cartList.map((item) => {
+      if (item.id === id) {
+        itemInCart = item;
+        isItemInCart = true;
+        return;
+      }
+    });
+
+    if (isItemInCart) {
+      if (itemInCart.quantity === 8) {
+        showNotification(
+          'warning',
+          'Maximum limit to add',
+          'Limit to order is between 1 and 8'
+        );
+        return;
+      } else if (itemInCart.quantity + quantity >= 8) {
+        dispatch(addQuantity(itemInCart.id, 8 - itemInCart.quantity));
+      } else {
+        dispatch(addQuantity(itemInCart.id, quantity));
+      }
+    } else {
+      const { id, book_title, book_price, author, dispatch, book_cover_photo } =
+        props;
+      const { author_name } = author;
+      const item = {
+        id: id,
+        book_title: book_title,
+        book_price: book_price,
+        author_name: author_name,
+        discount_price: discountPrice,
+        book_cover_photo: book_cover_photo,
+        quantity: quantity
+      };
+      dispatch(addToCart(item));
+    }
     showNotification(
       'success',
       'Successfully added to cart',
       'Go to your cart to finish order books'
     );
-    dispatch(addToCart(item));
-    setTimeout(() => {
-      enableRedirect(true);
-    }, 1000);
   };
 
   const showNotification = (type, title, message) => {
     notification[type]({
       placement: 'bottomRight',
       message: title,
-      description: message
+      description: message,
+      duration: 1
     });
   };
 
@@ -99,8 +115,8 @@ function ProductPrice(props) {
       <div className="d-flex flex-column align-items-start justify-content-center">
         <Title level={5}>Quantity: </Title>
         <QuantityAdjustBtnGroup
-          plusQuantityFunc={addQuantity}
-          minusQuantityFunc={minusQuantity}
+          plusQuantityFunc={add}
+          minusQuantityFunc={minus}
           quantity={quantity}
           disabled={isItemInCart}
           className="my-3"

@@ -39,7 +39,7 @@ class Book extends Model
 
   public function scopeJoinReviews($query)
   {
-    return $query->join('reviews', 'reviews.book_id', '=', 'books.id');
+    return $query->leftJoin('reviews', 'reviews.book_id', '=', 'books.id');
   }
 
   public function scopeGetFinalPrice($query)
@@ -49,7 +49,7 @@ class Book extends Model
 
   public function scopeGetSubPrice($query)
   {
-    return $query->addSelect(DB::raw('book_price - discount_price as sub_price'));
+    return $query->addSelect(DB::raw('(CASE WHEN discount_price IS NULL THEN 0 ELSE book_price - discount_price END) as sub_price'));
   }
 
   public function scopeSelectInfoCardBook($query)
@@ -64,11 +64,11 @@ class Book extends Model
     );
   }
 
-  public function scopetAvailableDiscount($query)
+  public function scopeGetAvailableDiscount($query)
   {
     return $query->whereDate('discount_start_date', '<=', now())
       ->where(function ($query) {
-        $query->whereDate('discount_end_date', '>', now())
+        $query->whereDate('discount_end_date', '>=', now())
           ->orWhereNull('discount_end_date');
       });
   }
@@ -80,7 +80,7 @@ class Book extends Model
 
   public function scopeGetAvgRating($query)
   {
-    return $query->addSelect(DB::raw('ROUND(SUM(CAST(rating_start as decimal))/COUNT(reviews.id), 2) as avg_rating'));
+    return $query->addSelect(DB::raw('(CASE WHEN COUNT(reviews.id) = 0 THEN 0 ELSE ROUND(SUM(CAST(rating_start as decimal))/COUNT(reviews.id), 2) END) as avg_rating'));
   }
 
   public function scopeGetBooksWithRatingFilter($query, $rating)
@@ -88,59 +88,62 @@ class Book extends Model
     $query->having(DB::raw('ROUND(SUM(CAST(rating_start as decimal))/COUNT(reviews.id), 2)'), '>=', $rating);
   }
 
-  public function scopeGetBooksOnSale($query)
+  public function scopeJoinDiscount($query, $type)
   {
-    return $query->join('discounts', function ($join) {
-      $join->on('books.id', '=', 'discounts.book_id')
-        ->whereDate('discount_start_date', '<=', now())
-        ->where(function ($query) {
-          $query->whereDate('discount_end_date', '>', now())
-            ->orWhereNull('discount_end_date');
-        });
-    })
+    if ($type === 'inner') {
+      return $query->join('discounts', function ($join) {
+        $join->on('books.id', '=', 'discounts.book_id')
+          ->whereDate('discount_start_date', '<=', now())
+          ->where(function ($query) {
+            $query->whereDate('discount_end_date', '>=', now())
+              ->orWhereNull('discount_end_date');
+          });
+      });
+    } else {
+      return $query->leftJoin('discounts', function ($join) {
+        $join->on('books.id', '=', 'discounts.book_id')
+          ->whereDate('discount_start_date', '<=', now())
+          ->where(function ($query) {
+            $query->whereDate('discount_end_date', '>=', now())
+              ->orWhereNull('discount_end_date');
+          });
+      });
+    }
+  }
+
+  public function scopeGetBooksOnSale($query, $typeJoin)
+  {
+    return $query->joinDiscount($typeJoin)
       ->joinAuthor()
       ->joinReviews()
       ->selectInfoCardBook()
+      ->getFinalPrice()
       ->getSubPrice()
       ->groupBy("books.id", "discounts.discount_price", "authors.author_name")
       ->orderBy('sub_price', 'desc');
   }
 
-  public function scopeGetBooksRecommended($query)
+  public function scopeGetBooksRecommended($query, $typeJoin)
   {
-    return $query->leftJoin('discounts', function ($join) {
-      $join->on('books.id', '=', 'discounts.book_id')
-        ->whereDate('discount_start_date', '<=', now())
-        ->where(function ($query) {
-          $query->whereDate('discount_end_date', '>', now())
-            ->orWhereNull('discount_end_date');
-        });
-    })
+    return $query->joinDiscount($typeJoin)
       ->joinReviews()
       ->joinAuthor()
       ->selectInfoCardBook()
+      ->getFinalPrice()
       ->getAvgRating()
-      ->distinct()
       ->orderBy('avg_rating', 'desc')
+      ->orderBy('final_price', 'asc')
       ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price');
   }
 
-  public function scopeGetBooksPopular($query)
+  public function scopeGetBooksPopular($query, $typeJoin)
   {
-    return $query->leftJoin('discounts', function ($join) {
-      $join->on('books.id', '=', 'discounts.book_id')
-        ->whereDate('discount_start_date', '<=', now())
-        ->where(function ($query) {
-          $query->whereDate('discount_end_date', '>', now())
-            ->orWhereNull('discount_end_date');
-        });
-    })
+    return $query->joinDiscount($typeJoin)
       ->joinAuthor()
       ->joinReviews()
       ->selectInfoCardBook()
       ->getTotalReviews()
       ->getFinalPrice()
-      ->distinct()
       ->orderBy('total_reviews', 'desc')
       ->orderBy('final_price', 'asc')
       ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price');
@@ -148,18 +151,11 @@ class Book extends Model
 
   public function scopeGetBooks($query)
   {
-    return $query->leftJoin('discounts', function ($join) {
-      $join->on('books.id', '=', 'discounts.book_id')
-        ->whereDate('discount_start_date', '<=', now())
-        ->where(function ($query) {
-          $query->whereDate('discount_end_date', '>', now())
-            ->orWhereNull('discount_end_date');
-        });
-    })
+    return $query->joinDiscount('left')
       ->joinAuthor()
       ->joinReviews()
       ->selectInfoCardBook()
       ->getFinalPrice()
-      ->distinct();
+      ->groupBy('books.id', 'authors.author_name', 'discounts.discount_price');
   }
 }

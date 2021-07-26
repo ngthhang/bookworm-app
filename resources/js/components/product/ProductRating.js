@@ -7,7 +7,7 @@ function ProductRating({ id }) {
   return (
     <Card style={{ width: '100%' }}>
       <>
-        <ProductRatingFilter />
+        <ProductRatingFilter id={id} />
         <ProductRatingList id={id} />
       </>
     </Card>

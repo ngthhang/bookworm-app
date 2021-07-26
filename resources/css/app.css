@@ -14,14 +14,14 @@
   align-items: center;
   justify-content: center;
 }
-/* header{
-  position: fixed;
-  z-index: -1;
+
+.nav-bar-sticky{
   top: 0;
-  float: left;
-  padding-bottom: 100px;
+  position: fixed;
+  z-index: 1;
   width: 100%;
-}  */
+  height: fit-content;
+}
 
 footer{
   position: absolute;
@@ -37,7 +37,7 @@ footer{
 }
 
 .home-page{
-  margin: 50px 30px 200px 30px;
+  margin: 100px 30px 200px 30px;
 }
 
 /* CARD BOOK */
@@ -65,4 +65,24 @@ footer{
   font-size: 18px; 
 }
 
+.category-border{
+  background: rgb(2, 0, 36);
+  background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgba(35, 35, 122, 1) 23%, rgba(0, 201, 248, 1) 72%, rgba(0, 212, 255, 1) 100%);
+}
+
 /* BUTTONS */
+.link-route-product{
+  cursor: pointer;
+}
+
+.link-route-product:hover{
+  text-decoration: underline;
+}
+
+.slick-dots .slick-dots-bottom{
+  display: hidden;
+}
+
+.ant-carousel .slick-dots li button {
+  display: hidden;
+}

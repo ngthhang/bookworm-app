@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -28,18 +29,16 @@ class BookController extends Controller
 
     switch ($sort_type) {
       case 'SORT_BY_HOME_SALES':
-        $books = Book::getBooksOnSale();
+        $books = Book::getBooksOnSale('inner');
         break;
       case 'SORT_BY_RECOMMENDED':
-        $books = Book::getBooksRecommended();
+        $books = Book::getBooksRecommended('left');
         break;
       case 'SORT_BY_POPULAR':
-        $books = Book::getBooksPopular();
+        $books = Book::getBooksPopular('left');
         break;
       case 'SORT_BY_SALES':
-        $books = Book::getBooksOnSale()
-          ->getFinalPrice()
-          ->orderBy('final_price', 'asc');
+        $books = Book::getBooksOnSale('left');
         break;
       case 'SORT_BY_LOW_TO_HIGH':
         $books = Book::getBooks()->orderBy('final_price', 'asc');
@@ -47,6 +46,9 @@ class BookController extends Controller
       case 'SORT_BY_HIGH_TO_LOW':
         $books = Book::getBooks()->orderBy('final_price', 'desc');
         break;
+      case 'GET_ALL_ID':
+        $books = Book::select('id')->get();
+        return $books;
       default:
         return response('Not exist sort type name: ' . $sort_type, 404);
     }

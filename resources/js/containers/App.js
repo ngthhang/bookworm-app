@@ -6,7 +6,15 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import rootReducer from '../reducers';
-import { Home, Shop, About, Cart, Product } from '../pages';
+import {
+  Home,
+  Shop,
+  About,
+  Cart,
+  Product,
+  PageSuccessOrder,
+  PageStatus404
+} from '../pages';
 import { AppNavBar, AppFooter } from '../components/general';
 
 const store = createStore(rootReducer);
@@ -26,6 +34,8 @@ export default function App() {
           />
           <Route exact path="/about" component={About} />
           <Route exact path="/cart" component={Cart} />
+          <Route exact path="/success-order" component={PageSuccessOrder} />
+          <Route component={PageStatus404} />
         </Switch>
         <AppFooter />
       </Router>

@@ -38,6 +38,7 @@ function Product(props) {
       <Result
         status="404"
         title="404"
+        style={{ margin: '50px 0px 0px 50px' }}
         subTitle="Sorry, the product you found does not exist."
         extra={
           <Button type="primary" onClick={() => enableRedirect(true)}>
@@ -53,8 +54,10 @@ function Product(props) {
     const { category_name } = category;
 
     return (
-      <div className="mx-5 my-5 pb-5" style={{ minHeight: 1500 }}>
-        <h4>{category_name}</h4>
+      <div className="home-page mx-5 mb-5 pb-5" style={{ minHeight: 1500 }}>
+        <h4>
+          {category_name.charAt(0).toUpperCase() + category_name.slice(1)}
+        </h4>
         <hr />
         <Row gutter={[16, 32]} type="flex">
           <Col span={24} sm={24} md={24} xl={17} lg={17}>
@@ -67,7 +70,7 @@ function Product(props) {
             <ProductRating id={data.id} />
           </Col>
           <Col span={24} sm={24} md={24} xl={7} lg={7}>
-            <ProductReviewForm />
+            <ProductReviewForm id={data.id} />
           </Col>
           <AppBackTop />
         </Row>

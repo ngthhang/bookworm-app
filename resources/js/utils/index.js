@@ -10,7 +10,8 @@ export const getImage = (bookName) => {
 };
 
 export const formatNum = (number) => {
-  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  let num = Math.round(parseFloat(number) * 100) / 100;
+  return num.toLocaleString('en');
 };
 
 export const getTotalPriceItems = (bookPrice, discountPrice, quantity) => {
@@ -40,4 +41,22 @@ export const getQueryStringForReview = (props) => {
   currentPage !== null ? result.push(`page=${currentPage}`) : null;
   showInPage !== null ? result.push(`per_page=${showInPage}`) : null;
   return result.join('&');
+};
+
+export const formatDate = (date) => {
+  const dateObj = new Date(date);
+  const time = dateObj.toLocaleTimeString();
+
+  let year = dateObj.getFullYear();
+  let month = dateObj.getMonth() + 1;
+  let dt = dateObj.getDate();
+
+  if (dt < 10) {
+    dt = '0' + dt;
+  }
+  if (month < 10) {
+    month = '0' + month;
+  }
+
+  return time + ' ' + dt + '-' + month + '-' + year;
 };

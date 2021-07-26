@@ -1,12 +1,23 @@
-import React, { useEffect } from 'react';
-import { Image, Row, Col, Button, Typography, notification, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  Image,
+  Row,
+  Col,
+  Button,
+  Typography,
+  notification,
+  Modal,
+  Tooltip
+} from 'antd';
 import {
   MinusOutlined,
   PlusOutlined,
+  CloseOutlined,
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import PriceTag from '../general/PriceTag';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 import { deleteFromCart, addQuantity, minusQuantity } from '../../actions/';
 import { formatNum, getTotalPriceItems, getImage } from '../../utils/';
 
@@ -35,14 +46,16 @@ function CartItem(props) {
     dispatch,
     cart
   } = props;
+  const [redirect, enableRedirect] = useState(false);
 
-  useEffect(() => {}, [cart]);
+  useEffect(async () => {}, []);
 
   const showNotification = (type, title, message) => {
     notification[type]({
       placement: 'bottomRight',
       message: title,
-      description: message
+      description: message,
+      duration: 1
     });
   };
 
@@ -72,7 +85,7 @@ function CartItem(props) {
 
   const add = () => {
     if (quantity < 8) {
-      dispatch(addQuantity(id));
+      dispatch(addQuantity(id, 1));
     } else if (quantity === 8) {
       showNotification(
         'warning',
@@ -90,6 +103,13 @@ function CartItem(props) {
     }
   };
 
+  const viewProduct = () => {
+    enableRedirect(true);
+  };
+
+  if (redirect) {
+    return <Redirect to={`/product/${id}`} />;
+  }
   return (
     <>
       <Row
@@ -104,10 +124,12 @@ function CartItem(props) {
           />
         </Col>
         <Col span={20} sm={9} md={6} lg={6} xl={6}>
-          <div>
-            <h4>{book_title}</h4>
-            <span>{author_name}</span>
-          </div>
+          <Tooltip title="Click to view product details">
+            <div onClick={viewProduct} className="link-route-product">
+              <h4>{book_title}</h4>
+              <span>{author_name}</span>
+            </div>
+          </Tooltip>
         </Col>
         <Col span={20} sm={9} md={5} lg={4} xl={4}>
           <PriceTag
@@ -173,11 +195,10 @@ function CartItem(props) {
           className="d-flex align-items-center justify-content-center"
         >
           <Button
-            type="primary"
             danger
             shape="circle"
             className="d-flex align-items-center justify-content-center"
-            icon={<MinusOutlined />}
+            icon={<CloseOutlined />}
             onClick={() => showDeleteConfirm()}
           ></Button>
         </Col>
@@ -187,8 +208,4 @@ function CartItem(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
-  cart: state.cart
-});
-
-export default connect(mapStateToProps)(CartItem);
+export default connect()(CartItem);

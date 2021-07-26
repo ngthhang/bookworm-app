@@ -6,7 +6,8 @@ const {
   FILTER_BY_RATING,
   SET_SORT_TYPE,
   SHOW_IN_PAGE,
-  CHANGE_CURRENT_PAGE
+  CHANGE_CURRENT_PAGE,
+  SET_INIT
 } = sortActions;
 
 const { SORT_BY_SALES } = sortTypes;
@@ -56,6 +57,10 @@ const sort = (state = initialState, action) => {
       return {
         ...state,
         currentPage: action.number
+      };
+    case SET_INIT:
+      return {
+        ...initialState
       };
     default:
       return state;

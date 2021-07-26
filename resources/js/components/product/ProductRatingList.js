@@ -9,7 +9,7 @@ import {
   Pagination
 } from 'antd';
 import { connect } from 'react-redux';
-import { changePageInReview } from '../../actions';
+import { changePageInReview, setFilter } from '../../actions';
 import {
   updateList,
   updateListFirst
@@ -18,33 +18,39 @@ import {
   getBookByIdAndQueryStr,
   getBookById
 } from '../../services/book.service';
-import { getQueryStringForReview } from '../../utils';
+import { getQueryStringForReview, formatDate } from '../../utils';
 
 const { Text } = Typography;
 
 function ProductRatingList(props) {
   const { sortReviewList, sortReview, id, dispatch } = props;
+  const { currentPage, showInPage, updateReview } = sortReview;
   const [disabled, setDisabled] = useState(true);
 
   useEffect(async () => {
     const query = await getQueryStringForReview(sortReview);
-    console.log(sortReview);
-    console.log(query);
+    console.log('LOAD LIST');
     const resFirst = await getBookById(id);
     const res = await getBookByIdAndQueryStr(id, query);
     if (JSON.stringify(resFirst.data.reviews) !== JSON.stringify({})) {
       dispatch(updateListFirst(resFirst.data.reviews));
       setDisabled(false);
     } else {
+      dispatch(updateListFirst({}));
       setDisabled(true);
     }
     if (JSON.stringify(res.data.reviews) !== JSON.stringify({})) {
       dispatch(updateList(res.data.reviews));
-      setDisabled(false);
     } else {
-      setDisabled(true);
+      dispatch(updateList({}));
     }
-  }, [sortReview]);
+  }, [sortReview, updateReview]);
+
+  console.log('updateReview: ' + updateReview);
+
+  useEffect(() => {
+    dispatch(setFilter('all'));
+  }, [id]);
 
   if (disabled) {
     return (
@@ -55,8 +61,9 @@ function ProductRatingList(props) {
     );
   } else {
     const { reviews } = sortReviewList;
-    const { current_page, per_page, data, total } = reviews;
-    const page = parseInt(per_page);
+    const { data, total } = reviews;
+    console.log('data reviews: ');
+    console.log(data);
     return (
       <div>
         <List
@@ -74,15 +81,16 @@ function ProductRatingList(props) {
                 }
                 description={<Text>{item.review_details}</Text>}
               />
-              <Text type="secondary">{item.review_date}</Text>
+              <Text type="secondary">{formatDate(item.review_date)}</Text>
             </List.Item>
           )}
         />
         <Pagination
           defaultCurrent={1}
-          current={current_page}
-          pageSize={page}
+          current={currentPage}
+          pageSize={showInPage}
           total={total}
+          responsive={true}
           onChange={(value) => dispatch(changePageInReview(value))}
           className="d-flex align-items-center justify-content-center"
         />

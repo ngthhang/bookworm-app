@@ -65,3 +65,13 @@ export const getBooksByFilter = async (queryStr) => {
     return { status: 404 };
   }
 };
+
+export const getAllIdBooks = async () => {
+  try {
+    const res = await axios.get(`/books?sort_type=GET_ALL_ID`);
+    return res;
+  } catch (e) {
+    console.log('Error: ' + e.message);
+    return { status: 404 };
+  }
+};
