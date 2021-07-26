@@ -20,6 +20,9 @@ import { AppNavBar, AppFooter } from '../components/general';
 const store = createStore(rootReducer);
 
 export default function App() {
+  console.warn = () => {};
+  console.error = () => {};
+  console.log = () => {};
   return (
     <div className="App">
       <Router>

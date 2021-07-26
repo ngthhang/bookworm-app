@@ -73,9 +73,7 @@ function CartItem(props) {
       onOk() {
         removeInCart();
       },
-      onCancel() {
-        console.log('Cancel');
-      }
+      onCancel() {}
     });
   };
 

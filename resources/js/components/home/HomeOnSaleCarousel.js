@@ -16,9 +16,7 @@ export default class HomeOnSaleCarousel extends Component {
   }
 
   async componentDidMount() {
-    console.log('did mount');
     const data = await getBooksOnSale();
-    console.log(data);
     this.setState({
       booksOnSale: data,
       isLoading: false
@@ -53,7 +51,7 @@ export default class HomeOnSaleCarousel extends Component {
           }
         },
         {
-          breakpoint: 1024,
+          breakpoint: 910,
           settings: {
             slidesToShow: 2,
             slidesToScroll: 2,
@@ -80,7 +78,7 @@ export default class HomeOnSaleCarousel extends Component {
     };
 
     return (
-      <Row gutter={[32, 0]}>
+      <Row gutter={[16, 0]}>
         <Col span={2} className="d-flex align-items-center">
           <CarouselPrevButton onClick={this.prev} />
         </Col>

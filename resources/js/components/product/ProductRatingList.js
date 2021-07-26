@@ -29,7 +29,6 @@ function ProductRatingList(props) {
 
   useEffect(async () => {
     const query = await getQueryStringForReview(sortReview);
-    console.log('LOAD LIST');
     const resFirst = await getBookById(id);
     const res = await getBookByIdAndQueryStr(id, query);
     if (JSON.stringify(resFirst.data.reviews) !== JSON.stringify({})) {
@@ -46,8 +45,6 @@ function ProductRatingList(props) {
     }
   }, [sortReview, updateReview]);
 
-  console.log('updateReview: ' + updateReview);
-
   useEffect(() => {
     dispatch(setFilter('all'));
   }, [id]);
@@ -62,8 +59,6 @@ function ProductRatingList(props) {
   } else {
     const { reviews } = sortReviewList;
     const { data, total } = reviews;
-    console.log('data reviews: ');
-    console.log(data);
     return (
       <div>
         <List

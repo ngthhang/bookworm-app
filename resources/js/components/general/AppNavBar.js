@@ -15,8 +15,6 @@ function AppNavBar({ cart }) {
   const { totalCart } = cart;
   let currentLocation = null;
   const { pathname } = location;
-  console.log(pathname);
-  console.log(currentLocation);
   switch (true) {
     case pathname === '/':
       currentLocation = 'home';
@@ -36,28 +34,28 @@ function AppNavBar({ cart }) {
 
   const menuDropdown = (
     <Menu>
-      <Menu.Item>
+      <Menu.Item key="home">
         <AppNavBarLink
           currentLocation={currentLocation}
           route="/"
           typeLocation="home"
         />
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key="shop">
         <AppNavBarLink
           currentLocation={currentLocation}
           route="/shop"
           typeLocation="shop"
         />
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key="about">
         <AppNavBarLink
           currentLocation={currentLocation}
           route="/about"
           typeLocation="about"
         />
       </Menu.Item>
-      <Menu.Item>
+      <Menu.Item key="cart">
         <AppNavBarLink
           currentLocation={currentLocation}
           route="/cart"

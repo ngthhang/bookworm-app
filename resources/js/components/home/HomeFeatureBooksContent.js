@@ -14,14 +14,10 @@ function HomeFeatureBooksContent({ visibilityFilter }) {
   useEffect(async () => {
     let res;
     setLoading(true);
-    console.log('hello');
-    console.log(visibilityFilter);
     if (visibilityFilter === 'SHOW_POPULAR') {
       res = await getPopularBooks();
-      console.log(res);
     } else {
       res = await getRecommendedBooks();
-      console.log(res);
     }
     setData(res);
     setTimeout(() => {

@@ -15,7 +15,6 @@ function ProductRatingFilter(props) {
 
   useEffect(() => {
     setDisabled(true);
-    console.log('LOAD FILTER');
     if (JSON.stringify(sortReviewList.reviewsFirst) !== JSON.stringify({})) {
       setDisabled(false);
     }

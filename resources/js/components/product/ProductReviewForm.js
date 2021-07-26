@@ -51,8 +51,6 @@ function ProductReviewForm(props) {
       book_id: id
     };
 
-    console.log(request);
-
     const res = await submitReview(request);
     showNotification(
       'success',
